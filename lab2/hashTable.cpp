@@ -52,9 +52,9 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
  : h(f), MAX_LOAD(ml)
 {
     nItems = 0;
-    for (int i = 0; i<tableSize; i++){
+    for (int i = 0; i<nextPrime(tableSize); i++){
         list<Item*> temp;
-        theLists.push_back( temp);
+        theLists.push_back(temp);
     }
 }
 
@@ -64,7 +64,9 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
 //TO IMPLEMENT
 void HashTable::makeEmpty()
 {
-    //ADD CODE
+    for (int i = 0; i < theLists.size(); i ++) {
+        theLists[i].clear();
+    }
 }
 
 
@@ -75,7 +77,7 @@ HashTable::~HashTable()
 
     nItems = 0;
 
-    cout << "** Hash Table Destructor" << endl;
+    //cout << "** Hash Table Destructor" << endl;
 }
 
 
@@ -83,8 +85,7 @@ HashTable::~HashTable()
 //TO IMPLEMENT
 double HashTable::loadFactor() const
 {
-
-    return nItems/MAX_LOAD;
+    return (double) nItems/theLists.size();
 }
 
 
@@ -111,15 +112,25 @@ void HashTable::reHash()
 //TO IMPLEMENT
 Item* HashTable::find(string x) const
 {
-   int number = h(x, theLists.size());
+//   const list<Item*> whichList = theLists[h(x, theLists.size())];
+//   return (std::find(whichList.begin(), whichList.end(), x) != whichList.end());
+   unsigned int number = h(x, theLists.size());
+
    Item *pointis = theLists[number].front();
-   while (pointis != NULL){
-        if(pointis->word == x){
-            return pointis;
-        }
-        pointis++;
-   }
-   return NULL;
+    cout << "numbah iz: " << number << " and the word iz: " << x << endl;
+    if(theLists[number].size() != 0){
+        while (pointis->word != ""){
+           if (pointis->word == x){
+                cout << "I found it!! " << x << endl;
+                return pointis;
+           }
+            else
+                ++pointis;
+       }
+
+    }
+    cout << "I did not find "<< x << endl;
+    return NULL;
 }
 
 
@@ -132,6 +143,9 @@ Item* HashTable::insert(string w, short i)
    int number = h(w, theLists.size());
    Item *word = new Item(w,i);
    theLists[number].push_back(word);
+   //cout << "I insert "<< w << endl;
+
+   ++nItems;
 
    return word;
 }
@@ -143,15 +157,17 @@ Item* HashTable::insert(string w, short i)
 //TO IMPLEMENT
 bool HashTable::remove(string w)
 {
-    int number = h(w, theLists.size());
-    Item *pointis = theLists[number].front();
-    while (pointis != NULL){
-        if(pointis->word == w){
-            pointis.erase(POSITIONEN!!!!!!!)
-        }
-        pointis++;
+    list<Item*> current = theLists[h(w, theLists.size())];
+    Item* itr = find(w);
+
+    if (!itr){
+        return false;
     }
-    return false;
+
+    current.list::remove(itr);
+    --nItems;
+
+    return true;
 }
 
 
@@ -159,7 +175,16 @@ bool HashTable::remove(string w)
 //TO IMPLEMENT
 ostream& operator <<(ostream& os, const HashTable& T)
 {
-   //ADD CODE
+
+    for (int i=0; i < T.theLists.size(); i++){
+        Item* itr = T.theLists[i].front();
+        while (itr != T.theLists[i].back()){
+            //os << itr->word << " " << "counter : " << itr->counter << endl;
+            //os << "hello, my name is Emma and my counter is 2" << endl;
+            os << itr << endl;
+            ++itr;
+        }
+    }
     return os;
 }
 
