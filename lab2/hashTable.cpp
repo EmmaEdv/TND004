@@ -65,6 +65,8 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
 void HashTable::makeEmpty()
 {
     for (int i = 0; i < theLists.size(); i ++) {
+            //Aida: it leaks memory
+            //walk through the lists and delete teh items
         theLists[i].clear();
     }
 }
@@ -112,25 +114,39 @@ void HashTable::reHash()
 //TO IMPLEMENT
 Item* HashTable::find(string x) const
 {
-//   const list<Item*> whichList = theLists[h(x, theLists.size())];
-//   return (std::find(whichList.begin(), whichList.end(), x) != whichList.end());
-   unsigned int number = h(x, theLists.size());
+    const list<Item*> whichList = theLists[h(x, theLists.size())];
+    auto it = whichList.begin();
 
-   Item *pointis = theLists[number].front();
-    cout << "numbah iz: " << number << " and the word iz: " << x << endl;
-    if(theLists[number].size() != 0){
-        while (pointis->word != ""){
-           if (pointis->word == x){
-                cout << "I found it!! " << x << endl;
-                return pointis;
-           }
-            else
-                ++pointis;
-       }
+    while( it != whichList.end() )
+    {
+        Item* p = *it;
+       if (p->word == x) return p;
 
+       it++;
     }
-    cout << "I did not find "<< x << endl;
-    return NULL;
+
+    return nullptr;
+
+//   return (std::find(whichList.begin(), whichList.end(), x) != whichList.end());
+//   unsigned int number = h(x, theLists.size());
+//
+//   Item *pointis = theLists[number].front();
+//
+//    cout << "numbah iz: " << number << " and the word iz: " << x << endl;
+//
+//    if(theLists[number].size() != 0){
+//        while (pointis->word != ""){
+//           if (pointis->word == x){
+//                cout << "I found it!! " << x << endl;
+//                return pointis;
+//           }
+//            else
+//                ++pointis;
+//       }
+//
+//    }
+//    cout << "I did not find "<< x << endl;
+//    return NULL;
 }
 
 
@@ -164,7 +180,9 @@ bool HashTable::remove(string w)
         return false;
     }
 
-    current.list::remove(itr);
+    current.list::remove(itr);  //??
+
+    delete itr;
     --nItems;
 
     return true;
