@@ -49,7 +49,7 @@ int nextPrime( int n )
 //constructor
 //TO IMPLEMENT
 HashTable::HashTable(int tableSize, HASH f, int ml)
- : h(f), MAX_LOAD(ml)
+ : h(f), MAX_LOAD(ml) //MAX_LOAD is the limit of items in the collision list!
 {
     nItems = 0;
     for (int i = 0; i<nextPrime(tableSize); i++){
@@ -100,7 +100,19 @@ void HashTable::reHash()
         << fixed << setprecision(2)
         << loadFactor() << endl;
 
-    //ADD CODE
+    //1. call the constructor
+    HashTable newHash = HashTable(2*theLists.size(), h, MAX_LOAD);
+    //2. insert all items from the old table
+
+    for (int i=0; i < theLists.size(); i++){
+       auto itr = theLists[i].front();
+        while (itr != theLists[i].back()){
+            //newHash.insert(itr->word, itr->counter);
+            cout << "hector hedgehog" << endl;
+        }
+    }
+
+    //3. destruct the old, assign the new table as this(in some weird way)
 
      cout << "** Re-hashing completed ..." << endl;
      cout << "Hash table load factor = "
@@ -135,13 +147,17 @@ Item* HashTable::find(string x) const
 //TO IMPLEMENT
 Item* HashTable::insert(string w, short i)
 {
-   int number = h(w, theLists.size());
-   Item *word = new Item(w,i);
-   theLists[number].push_back(word);
-   //cout << "I insert "<< w << endl;
+    //check the load factor, eventually call rehash before the insertion
+    //cout << "loadfactor is " << loadFactor() << " and MAX_LOAD " << MAX_LOAD << endl;
+    if(loadFactor() >= MAX_LOAD) {
+        reHash();
+    }
+    Item *word = new Item(w,i);
+    int number = h(w, theLists.size());
+        theLists[number].push_back(word);
+
 
    ++nItems;
-
    return word;
 }
 
@@ -172,7 +188,7 @@ bool HashTable::remove(string w)
 //TO IMPLEMENT
 ostream& operator <<(ostream& os, const HashTable& T)
 {
-    os << "Size = " << T.nItems/T.loadFactor() << endl << //is correct formula but the rehash is not implemented which causes troubles
+    os << "Size = " << T.theLists.size() << endl << //is correct formula but the rehash is not implemented which causes troubles
     "Number of items in the table = " << T.nItems << endl << endl;
     int counter = 0;
 
