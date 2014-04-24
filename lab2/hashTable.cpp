@@ -126,27 +126,6 @@ Item* HashTable::find(string x) const
     }
 
     return nullptr;
-
-//   return (std::find(whichList.begin(), whichList.end(), x) != whichList.end());
-//   unsigned int number = h(x, theLists.size());
-//
-//   Item *pointis = theLists[number].front();
-//
-//    cout << "numbah iz: " << number << " and the word iz: " << x << endl;
-//
-//    if(theLists[number].size() != 0){
-//        while (pointis->word != ""){
-//           if (pointis->word == x){
-//                cout << "I found it!! " << x << endl;
-//                return pointis;
-//           }
-//            else
-//                ++pointis;
-//       }
-//
-//    }
-//    cout << "I did not find "<< x << endl;
-//    return NULL;
 }
 
 
@@ -193,16 +172,22 @@ bool HashTable::remove(string w)
 //TO IMPLEMENT
 ostream& operator <<(ostream& os, const HashTable& T)
 {
+    os << "Size = " << T.nItems/T.loadFactor() << endl << //is correct formula but the rehash is not implemented which causes troubles
+    "Number of items in the table = " << T.nItems << endl << endl;
+    int counter = 0;
 
     for (int i=0; i < T.theLists.size(); i++){
-        Item* itr = T.theLists[i].front();
-        while (itr != T.theLists[i].back()){
-            //os << itr->word << " " << "counter : " << itr->counter << endl;
-            //os << "hello, my name is Emma and my counter is 2" << endl;
-            os << itr << endl;
-            ++itr;
+       auto itr = T.theLists[i].begin();
+        while (itr != T.theLists[i].end()){
+            os << "**List[" << counter << "]" << endl;
+            const Item *p = *itr;
+            //some check for empty slot, most desireable in the item operator<<
+            operator<<(os, *p);// need to call the ostream operator for Item
+            itr++;
+            counter++;
         }
     }
+    os << endl << endl;
     return os;
 }
 
