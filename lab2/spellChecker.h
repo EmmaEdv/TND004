@@ -103,7 +103,7 @@ class SpellChecker
     list<Item *> misspellings; /**< Misspellings list */
 
    //ADD other needed data members
-
+    list<Item *> addedWords; /**< Added words list */
 
     /** \brief Disabled copy constructor.
     *
