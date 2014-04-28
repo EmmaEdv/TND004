@@ -65,9 +65,12 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
 void HashTable::makeEmpty()
 {
     for (int i = 0; i < theLists.size(); i ++) {
-            //Aida: it leaks memory
-            //walk through the lists and delete teh items
-        theLists[i].clear();
+        //Aida: it leaks memory
+        //walk through the lists and delete teh items
+        while(!theLists[i].empty()){
+            theLists[i].pop_front();
+        }
+
     }
 }
 
@@ -79,7 +82,7 @@ HashTable::~HashTable()
 
     nItems = 0;
 
-    //cout << "** Hash Table Destructor" << endl;
+    cout << "** Hash Table Destructor" << endl;
 }
 
 
@@ -93,6 +96,8 @@ double HashTable::loadFactor() const
 
 //Rehashing function
 //TO IMPLEMENT
+
+
 void HashTable::reHash()
 {
     cout << "** Re-hashing ..." << endl;
@@ -100,15 +105,18 @@ void HashTable::reHash()
         << fixed << setprecision(2)
         << loadFactor() << endl;
 
-    //1. call the constructor
-    HashTable newHash = HashTable(2*theLists.size(), h, MAX_LOAD);
-    //2. insert all items from the old table
-
-    for (int i=0; i < theLists.size(); i++){
-       auto itr = theLists[i].front();
-        while (itr != theLists[i].back()){
-            //newHash.insert(itr->word, itr->counter);
-            cout << "hector hedgehog" << endl;
+    //1. copy the old vector
+    std::vector<list<Item*>> temp = theLists;
+    //2. clear the old vector, assign the nItems to zero
+    makeEmpty();
+    nItems = 0;
+    theLists.resize(nextPrime(2*temp.size()));
+    for (int i=0; i < temp.size(); i++){
+        //while there are more values in the copy, insert in the new and delete from the temporary
+        while(!temp[i].empty()){
+            auto itr = temp[i].front();
+            this->insert(itr->word, itr->counter);
+            temp[i].pop_front();
         }
     }
 
@@ -147,18 +155,16 @@ Item* HashTable::find(string x) const
 //TO IMPLEMENT
 Item* HashTable::insert(string w, short i)
 {
-    //check the load factor, eventually call rehash before the insertion
-    //cout << "loadfactor is " << loadFactor() << " and MAX_LOAD " << MAX_LOAD << endl;
     if(loadFactor() >= MAX_LOAD) {
         reHash();
     }
     Item *word = new Item(w,i);
     int number = h(w, theLists.size());
-        theLists[number].push_back(word);
 
+    theLists[number].push_front(word);
 
-   ++nItems;
-   return word;
+    ++nItems;
+    return word;
 }
 
 
@@ -168,39 +174,33 @@ Item* HashTable::insert(string w, short i)
 //TO IMPLEMENT
 bool HashTable::remove(string w)
 {
-    list<Item*> current = theLists[h(w, theLists.size())];
-    Item* itr = find(w);
+     Item* itr = find(w);
+     if (!itr){
+         return false;
+     }
+     theLists[h(w,theLists.size())].list::remove(itr);
 
-    if (!itr){
-        return false;
-    }
+     delete itr;
+     --nItems;
 
-    current.list::remove(itr);  //??
-
-    delete itr;
-    --nItems;
-
-    return true;
-}
+     return true;
+ }
 
 
 //Overloaded operator<<: outputs all items to stream os
 //TO IMPLEMENT
 ostream& operator <<(ostream& os, const HashTable& T)
 {
-    os << "Size = " << T.theLists.size() << endl << //is correct formula but the rehash is not implemented which causes troubles
+    os << "Size = " << T.theLists.size() << endl <<
     "Number of items in the table = " << T.nItems << endl << endl;
-    int counter = 0;
 
     for (int i=0; i < T.theLists.size(); i++){
        auto itr = T.theLists[i].begin();
+       os << "**List[" << i << "]" << endl;
         while (itr != T.theLists[i].end()){
-            os << "**List[" << counter << "]" << endl;
             const Item *p = *itr;
-            //some check for empty slot, most desireable in the item operator<<
-            operator<<(os, *p);// need to call the ostream operator for Item
+            operator<<(os, *p);// call the ostream operator for Item
             itr++;
-            counter++;
         }
     }
     os << endl << endl;
