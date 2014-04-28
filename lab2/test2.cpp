@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "../hashTable.h"
+#include "hashTable.h"
 
 using namespace std;
 
@@ -52,32 +52,32 @@ int main()
     else
         cout << "Aida is already in the table!" << endl;
 
-//    cout << "** Find" << endl << endl;
-//
-//    const Item *p = table.find("Jonas");
-//    if (p) cout << *p << endl << endl;
-//
-//    cout << "** Remove" << endl << endl;
-//
-//    if (table.remove("Jonas"))
-//        cout << "Remove successfull!!" << endl << endl;
-//
-//    p = table.find("Jonas");
-//    if (p)
-//        cout << *p;
-//    else
-//        cout << "Jonas not found." << endl << endl;
-//
-//    //cout << table << endl << endl;
-//
-//    table.insert("Jesper");
-//    table.insert("Rikard");
-//    table.insert("Ian");
-//    table.insert("Sawn");
-//    table.insert("Robert");
-//    table.insert("Hans");
-//
-//    cout << table << endl << endl;
+    cout << "** Find" << endl << endl;
+
+    const Item *p = table.find("Jonas");
+    if (p) cout << *p << endl << endl;
+
+    cout << "** Remove" << endl << endl;
+
+    if (table.remove("Jonas"))
+        cout << "Remove successfull!!" << endl << endl;
+
+    p = table.find("Jonas");
+    if (p)
+        cout << *p;
+    else
+        cout << "Jonas not found." << endl << endl;
+
+    cout << table << endl << endl;
+
+    table.insert("Jesper");
+    table.insert("Rikard");
+    table.insert("Ian");
+    table.insert("Sawn");
+    table.insert("Robert");
+    table.insert("Hans");
+
+    cout << table << endl << endl;
 
     return 0;
 }
