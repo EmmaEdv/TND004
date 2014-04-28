@@ -42,7 +42,30 @@ bool isNotAlpha(char c)
 //TO IMPLEMENT
 SpellChecker::SpellChecker(string fileName, int n)
 {
+    //1. create a hashtable with the given number of slots
+    HashTable* dictionary = new HashTable(n, my_hash, 2);
 
+    //2. insert words from the text file into the hash table
+
+    //open fstream
+    ifstream file(fileName);
+
+    if (!file){
+        cerr << "Dictionary file could not be opened!!" << endl;
+        exit(1);
+    }
+
+    //load the dictionary
+    string w;
+
+    while(file >> ws && getline(file, w))
+    {
+        dictionary->HashTable::insert(w,0);
+    }
+    file.close();
+
+    list<Item *> misspellings;
+    list<Item *> addedWords;
 }
 
 
@@ -50,9 +73,8 @@ SpellChecker::SpellChecker(string fileName, int n)
 //TO IMPLEMENT
 SpellChecker::~SpellChecker()
 {
-   //ADD CODE
-
-   cout << "** Spell Checker Destructor" << endl;
+    dictionary->HashTable::~HashTable();
+    cout << "** Spell Checker Destructor" << endl;
 }
 
 
@@ -72,6 +94,11 @@ bool SpellChecker::testSpelling(string w)
     if (w == "") return true; //case of a word consisting only of punctuation signs
 
     //ADD CODE
+    const Item* p = dictionary->HashTable::find(w);
+    if(p != nullptr) {
+        return true;
+    }
+
     return false;
 }
 
@@ -81,7 +108,9 @@ bool SpellChecker::testSpelling(string w)
 //TO IMPLEMENT
 void SpellChecker::addWord(string w)
 {
-    //ADD CODE
+    dictionary->HashTable::insert(w, 0);
+
+    addedWords.push_back(new Item(w, 0));
 }
 
 
@@ -90,7 +119,9 @@ void SpellChecker::addWord(string w)
 //TO IMPLEMENT
 void SpellChecker::clean()
 {
-    //ADD CODE
+    for(auto itr = addedWords.front(); itr!=addedWords.back(); itr++){
+        dictionary->HashTable::remove(itr->word);
+    }
 }
 
 
@@ -103,6 +134,17 @@ void SpellChecker::createLog(ostream& os)
     os << "=========================" << endl;
 
     //ADD CODE
+    ofstream logFile("log.txt");
+
+    while(!misspellings.empty()) {
+        auto itr = misspellings.front();
+        os << setw(25) << itr->word
+       << "   Counter: " << itr->counter << endl;
+       misspellings.pop_front();
+
+    }
+    logFile.close();
+
 }
 
 
