@@ -39,7 +39,7 @@ bool isNotAlpha(char c)
 
 //Constructor
 //Text file fileName should contain a dictionary with n words
-//TO IMPLEMENT
+//IMPLEMENTED - works fine!
 SpellChecker::SpellChecker(string fileName, int n)
 {
     //1. create a hashtable with the given number of slots
@@ -65,6 +65,7 @@ SpellChecker::SpellChecker(string fileName, int n)
     }
     file.close();
 
+    nWords = n;
     list<Item *> misspellings;
     list<Item *> addedWords;
 }
@@ -74,7 +75,22 @@ SpellChecker::SpellChecker(string fileName, int n)
 //TO IMPLEMENT
 SpellChecker::~SpellChecker()
 {
-    dictionary->HashTable::~HashTable();
+    //destroy the dictionary
+    dictionary->~HashTable();
+    //empty the misspellings
+    for(int i = 0; i < misspellings.size(); i++){
+        while(!misspellings.empty()){
+            misspellings.pop_front();
+        }
+    }
+    //empty the addedWords
+    for(int i = 0; i < addedWords.size(); i++){
+        while(!addedWords.empty()){
+            addedWords.pop_front();
+        }
+    }
+    nWords = 0;
+
     cout << "** Spell Checker Destructor" << endl;
 }
 
@@ -83,7 +99,7 @@ SpellChecker::~SpellChecker()
 //If w is a correct word (belongs to the dictionary) then return true, else return false
 //If w is a misspelling then the dictionary and
 //the misspeling list might need to be updated
-//TO IMPLEMENT
+//TO IMPLEMENT - unsuref...
 bool SpellChecker::testSpelling(string w)
 {
     //remove non-alpha chars
@@ -91,34 +107,39 @@ bool SpellChecker::testSpelling(string w)
 
     //convert to lower-case letters
     transform(w.begin(), w.end(), w.begin(), ::tolower);
-    //cout << w << endl;
-    //if (w == "") return true; //case of a word consisting only of punctuation signs
+   // //if (w == "") return true; //case of a word consisting only of punctuation signs
     //ADD CODE
 
-//1. if the word exist in the dictionary -> return true
-
-//2. if it not exists in the dictionary -> check if it exists in the misspellings
-
-//3. if the word exists in the misspellings, ++ their counter -> return false
-
-//4. if it not exists, add the word to misspellings and set the counter to 1. -> return false
-
-//    return nullptr;
-//
-//    if(w[0] == 'a'){
-//        Item* temp = new Item(w, 0);
-        misspellings.push_back(new Item(w,0));
+    //1. if the word exist in the dictionary -> return true
+    //error is right here
+//    Item *h = dictionary->find(w);
+//    if(h){
+//        return true;
 //    }
-//    return (w[0] == 'a');
-//    return false;
+    //2. if it not exists in the dictionary -> check if it exists in the misspellings
+    //3. if the word exists in the misspellings, ++ their counter -> return false
+    auto itr = misspellings.begin();
+    while (itr != misspellings.end()){
+        Item *p = *itr;
+        //cout << p->word << " loop" << endl;
+        if(p->word == w){
+            p->counter++;
+            cout << w << " -> " << p->counter << endl;
+            return false;
+        }
+        ++itr;
+    }
+    //4. if it not exists, add the word to misspellings and set the counter to 1. -> return false
+    misspellings.push_back(new Item(w, 1));
+    cout <<w << " added to misspellnings" << endl;
 
-    return true;
+    return false;
 }
 
 
 //Add a new word w to the dictionary
 //The list of addedWords is also updated
-//TO IMPLEMENT
+//TO IMPLEMENT - unsure.........
 void SpellChecker::addWord(string w)
 {
     //remove non-alpha chars
@@ -126,32 +147,37 @@ void SpellChecker::addWord(string w)
 
     //convert to lower-case letters
     transform(w.begin(), w.end(), w.begin(), ::tolower);
-    //1. check if the word  exists in the dictionary
-
-    //2. if it not exists: add the word to the dictionary with counter 0
-    //3. and add the word and the counter 0 to addedWords
-    Item *p = dictionary->HashTable::insert(w,0);
-    this->addedWords.push_back(new Item(w, 0));
-    cout << "added " << w << " -> size of addedWords = " << addedWords.size() << endl;
+    //1. check if the word exists in the dictionary
+//    Item *h = dictionary->find(w);
+    //2. if it does not exists: add the word to the dictionary with counter 0
+    //3. and add the word and the counter 0 to addedWords, increase the nWords
+//    if(!h){
+//        dictionary->insert(w,0);
+        Item *p = dictionary->HashTable::insert(w,0);
+        this->addedWords.push_back(new Item(w, 0));
+        cout << "added " << w << " -> size of addedWords = " << addedWords.size() << endl;
+        ++nWords;
+    //}
 }
 
 
 //Remove all extra added words from the dictionary
 //This function can be called before starting to spell check a new text file
-//TO IMPLEMENT
+//TO IMPLEMENT - might work
 void SpellChecker::clean()
 {
     //loop trough the addedWords list and remove them from the dictionary by using
     //iterators to access the key for the item to be removed (word)
     for(auto itr = addedWords.front(); itr!=addedWords.back(); itr++){
         dictionary->HashTable::remove(itr->word);
+        addedWords.pop_front(); //unsure if this is okay
     }
 }
 
 
 //1. Create the log file with the misspellings
 //2. Empty the misspellings list
-//TO IMPLEMENT -> this works fine
+//YAY -> this works fine
 void SpellChecker::createLog(ostream& os)
 {
     os << "*** LIST OF MISSPELLINGS" << endl;
@@ -168,7 +194,6 @@ void SpellChecker::createLog(ostream& os)
 
     }
     logFile.close();
-
 }
 
 
