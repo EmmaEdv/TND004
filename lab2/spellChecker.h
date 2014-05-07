@@ -29,7 +29,7 @@ class SpellChecker
     //Constructor
     //Text file fileName should contain a dictionary with n words
     //TO IMPLEMENT
-    SpellChecker(string fileName = "../engDict.txt", int n = 49200);
+    SpellChecker(string fileName = "engDict.txt", int n = 49200);
 
 
     /** \brief Destructor
