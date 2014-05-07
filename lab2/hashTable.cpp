@@ -52,10 +52,10 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
  : h(f), MAX_LOAD(ml) //MAX_LOAD is the limit of items in the collision list!
 {
     nItems = 0;
-    for (int i = 0; i<nextPrime(tableSize); i++){
-        list<Item*> temp;
-        theLists.push_back(temp);
-    }
+
+    theLists.resize(nextPrime(tableSize));
+
+
 }
 
 
@@ -66,7 +66,7 @@ void HashTable::makeEmpty()
 {
     for (int i = 0; i < theLists.size(); i ++) {
         //Aida: it leaks memory
-        //walk through the lists and delete teh items
+        //walk through the lists and delete the items
         while(!theLists[i].empty()){
             theLists[i].pop_front();
         }
@@ -105,22 +105,25 @@ void HashTable::reHash()
         << fixed << setprecision(2)
         << loadFactor() << endl;
 
-    //1. copy the old vector
-    std::vector<list<Item*>> temp = theLists;
-    //2. clear the old vector, assign the nItems to zero
-    makeEmpty();
-    nItems = 0;
-    theLists.resize(nextPrime(2*temp.size()));
-    for (int i=0; i < temp.size(); i++){
-        //while there are more values in the copy, insert in the new and delete from the temporary
-        while(!temp[i].empty()){
-            auto itr = temp[i].front();
-            this->insert(itr->word, itr->counter);
-            temp[i].pop_front();
+
+    int newSize = nextPrime(2*theLists.size());
+
+    std::vector<list<Item*>> temp(newSize);
+
+    for (int i=0; i < theLists.size(); i++)
+    {
+        while(!theLists[i].empty())
+        {
+            auto itr = theLists[i].front();
+            int n = h(itr->word, newSize);
+
+            temp[n].push_front(itr);
+            theLists[i].pop_front();
+
         }
     }
 
-    //3. destruct the old, assign the new table as this(in some weird way)
+    theLists = temp; // expensive, calls vctor::operator=
 
      cout << "** Re-hashing completed ..." << endl;
      cout << "Hash table load factor = "
@@ -140,9 +143,9 @@ Item* HashTable::find(string x) const
     while( it != whichList.end() )
     {
         Item* p = *it;
-       if (p->word == x) return p;
+        if (p->word == x) return p;
 
-       it++;
+        it++;
     }
 
     return nullptr;
@@ -160,7 +163,6 @@ Item* HashTable::insert(string w, short i)
     }
     Item *word = new Item(w,i);
     int number = h(w, theLists.size());
-
     theLists[number].push_front(word);
 
     ++nItems;
