@@ -45,9 +45,9 @@ bool Node::insert(ELEMENT v)
         }
         else{
             //HÄR PASSAR BARNET IN!
-            Node *child = new Node(v, nullptr, nullptr);
+            Node *child = new Node(v, this, this->left);
             this->left = child;
-            this->l_thread = false;
+            this->l_thread = false; //this has a left child ->is_thread? == false
         }
 
     }//1c. if v > root.value, continue in the right subtree
@@ -58,10 +58,10 @@ bool Node::insert(ELEMENT v)
         }
         else {
             //här passar barnet in!
-            Node *child = new Node(v, nullptr, nullptr);
+            Node *child = new Node(v, this, this->right);
             this->right = child;
-            this->r_thread = false;
-        }
+            this->r_thread = false; //this has a right child ->is_thread? == false
+        } 
     }
 
     return false;
