@@ -1,4 +1,4 @@
-#include "spellChecker.h"
+    #include "spellChecker.h"
 
 #include <fstream>
 #include <algorithm>
@@ -109,27 +109,23 @@ bool SpellChecker::testSpelling(string w)
 {
     //remove non-alpha chars
     w.erase(remove_if(w.begin(), w.end(), isNotAlpha), w.end());
-
     //convert to lower-case letters
     transform(w.begin(), w.end(), w.begin(), ::tolower);
     if (w == "") return true; //case of a word consisting only of punctuation signs
-
     //1. if the word exist in the dictionary -> return true
     //error is right here
     Item *h = dictionary->find(w);
     //cout << "get here" << endl;
 
     if(h){
-
         return true;
     }
     //2. if it does not exists in the dictionary -> check if it exists in the misspellings
     //3. if the word exists in the misspellings, ++ their counter -> return false
     else{
-
         auto itr = misspellings.begin();
-
         while( itr != misspellings.end()){
+
             Item* p = *itr;
             if (p->word == w) {
                 p->counter+=1;
@@ -137,13 +133,11 @@ bool SpellChecker::testSpelling(string w)
                 return false;
             }
             itr++;
-        }
+        } // if the word not exists in misspellings
         misspellings.push_front(new Item(w,1));
-        cout << "added new misspelling: " << w << endl;
+        //cout << misspellings.size() << endl;
         return false;
     }
-
-
     return false;
 }
 
@@ -163,10 +157,10 @@ void SpellChecker::addWord(string w)
     //2. if it does not exists: add the word to the dictionary with counter 0
     //3. and add the word and the counter 0 to addedWords, increase the nWords
     if(!h){
-        dictionary->insert(w,0);
+        //dictionary->insert(w,0);
         Item *p = dictionary->HashTable::insert(w,0); //returns nullptr?
         this->addedWords.push_back(new Item(w, 0));
-        cout << "added " << w << endl;
+        //cout << "added " << w << endl;
         ++nWords;
     }
 }
@@ -177,16 +171,20 @@ void SpellChecker::addWord(string w)
 //TO IMPLEMENT - might work
 void SpellChecker::clean()
 {
+    cout << "cleaning up your words " << endl;
     //loop trough the addedWords list and remove them from the dictionary by using
     //iterators to access the key for the item to be removed (word)
    auto itr = addedWords.begin();
    while(itr!=addedWords.end()){
         Item* p = *itr;
+        //cout << p-> word << " removed? " << dictionary->HashTable::remove(p->word) << endl;
         dictionary->HashTable::remove(p->word);
+        --nWords;
         addedWords.pop_front(); //crash!
-        itr++;
+        itr = addedWords.begin();
+        //cout << addedWords.size() << endl;
     }
-    //addedWords.clear();
+    addedWords.clear();
 }
 
 
@@ -200,6 +198,7 @@ void SpellChecker::createLog(ostream& os)
 
     //ADD CODE
     ofstream logFile("log.txt");
+    cout << misspellings.size() << endl;
 
     while(!misspellings.empty()) {
         auto itr = misspellings.front();
