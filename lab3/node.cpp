@@ -34,7 +34,7 @@ bool Node::insert(ELEMENT v)
     //1. search for the string of v -> if found counter ++ -> return false
     //1a. if v == root.value -> return false
     if(this->value.first == v.first){
-        cout << "tje value is already in the tree" << endl;
+        cout << "the value is already in the tree" << endl;
         this->value.second++;
         return false;
     }//1b. if v < root.value, continue in the left subtree
