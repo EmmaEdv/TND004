@@ -35,7 +35,7 @@ bool Node::insert(ELEMENT v)
     //1a. if v == root.value -> return false
     if(this->value.first == v.first){
         this->value.second++;
-        return false;
+        return true;
     }
     // if v < root.value, continue in the left subtree
     else if (this->value.first > v.first){
@@ -109,22 +109,23 @@ Node* Node::find(string key)
    // cout << "key: " << key << " and this: " << this->value.first << endl;
     //compare with actual value
 
-//    if(key == this->value.first){
-//        cout << key << " funnen!"<< endl;
-//        return this;
-//    }
-    if(key != this->value.first) {
-        if(key > this->value.first){
-            //cout << key << " > " << this->value.first << endl;
-            this->right->find(key);
-        }
-        if (key < this->value.first){
-            //cout << key << " < " << this->value.first << endl;
-            this->left->find(key);
-        }
-        
+    //cout << endl << "called find(" << key << ") once more " << endl;
+
+    if(key == this->value.first){
+        //cout << key << " > " << this->value.first << " -> recall" << endl;
+         return this;
     }
-    return nullptr; // smthg wrong here
+    else if (key < this->value.first){
+        //cout << key << " < " << this->value.first << " -> recall" << endl;
+        this->left->find(key);
+    }
+    else if(key > this->value.first){
+        //cout << key << " funnen! lämnar nu ok"<< endl << endl;
+        this->right->find(key);
+    }
+    
+    //cout << "key: " << key << " and this: " << this->value.first << endl;
+    return this; // smthg wrong here
 }
 
 

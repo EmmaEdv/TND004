@@ -83,12 +83,14 @@ ELEMENT& BST_threaded::operator[](string key)
     //ADD CODE
     ELEMENT e("", 0);
     //return e; //MUST remove this code
-    
+    //cout << "iterator! " << endl;
     Node *temp = root->left->find(key);
-    if(temp!= NULL){
-        cout <<  temp->value.first << " : " << temp->value.second << endl;
+    
+    if(temp!= nullptr){
+        //cout <<  temp->value.first << " : " << temp->value.second << endl;
         return temp->value;
     }
+    
     return e;
 }
 
