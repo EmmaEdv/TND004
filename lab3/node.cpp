@@ -31,6 +31,7 @@ Node::~Node()
 //Otherwise, return false --v already exists in the tree
 bool Node::insert(ELEMENT v)
 {
+    cout << this->value.first << " is the root, value for insert is: " << v.first << endl;
     //1. search for the string of v -> if found counter ++ -> return false
     //1a. if v == root.value -> return false
     if(this->value.first == v.first){
@@ -39,32 +40,38 @@ bool Node::insert(ELEMENT v)
         return false;
     }//1b. if v < root.value, continue in the left subtree
     else if (this->value.first > v.first){
+        cout << this->value.first << " > " << v.first << endl;
         //does this have any flags to the left? If yes --> insert to the left
         if(!this->l_thread){
             this->left->insert(v);
         }
         else{
+            cout << "insertion!" << endl;
             //HÄR PASSAR BARNET IN!
             Node *child = new Node(v, this, this->right);
+            child->l_thread = child->r_thread = true;
             this->left = child;
             this->l_thread = false; //this has a left child ->is_thread? == false
         }
 
     }//1c. if v > root.value, continue in the right subtree
     else if (this->value.first < v.first){
+        cout << this->value.first << " < " << v.first << endl;
         //does this have any flags to the right? If yes --> insert to the right
         if(!this->r_thread){
             this->right->insert(v);
         }
         else {
+            cout << "insertion!" << endl;
             //här passar barnet in!
             Node *child = new Node(v, this->left, this);
+            child->l_thread = child->r_thread = true;
             this->right = child;
             this->r_thread = false; //this has a right child ->is_thread? == false
         } 
     }
 
-    return false;
+    return true;
 }
 
 
