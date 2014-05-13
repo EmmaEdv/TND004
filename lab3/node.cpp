@@ -31,23 +31,19 @@ Node::~Node()
 //Otherwise, return false --v already exists in the tree
 bool Node::insert(ELEMENT v)
 {
-    cout << this->value.first << " is the root, value for insert is: " << v.first << endl;
     //1. search for the string of v -> if found counter ++ -> return false
     //1a. if v == root.value -> return false
     if(this->value.first == v.first){
-        cout << "the value is already in the tree" << endl;
         this->value.second++;
         return false;
-    }//1b. if v < root.value, continue in the left subtree
+    }
+    // if v < root.value, continue in the left subtree
     else if (this->value.first > v.first){
-        cout << this->value.first << " > " << v.first << endl;
-        //does this have any flags to the left? If yes --> insert to the left
+        //does this have any left child? If true --> insert to the left
         if(!this->l_thread){
             this->left->insert(v);
         }
-        else{
-            cout << "insertion!" << endl;
-            //HÄR PASSAR BARNET IN!
+        else{//insert
             Node *child = new Node(v, this, this->right);
             child->l_thread = child->r_thread = true;
             this->left = child;
@@ -55,15 +51,14 @@ bool Node::insert(ELEMENT v)
         }
 
     }//1c. if v > root.value, continue in the right subtree
+    
     else if (this->value.first < v.first){
-        cout << this->value.first << " < " << v.first << endl;
-        //does this have any flags to the right? If yes --> insert to the right
+        //does this have any right child? If true --> insert to the right
         if(!this->r_thread){
             this->right->insert(v);
         }
         else {
-            cout << "insertion!" << endl;
-            //här passar barnet in!
+            //insert
             Node *child = new Node(v, this->left, this);
             child->l_thread = child->r_thread = true;
             this->right = child;
@@ -111,8 +106,25 @@ void Node::removeMe(Node* parent, bool isRight)
 //If there is no node storing key then return nullptr
 Node* Node::find(string key)
 {
-    //ADD CODE
-    return nullptr;
+   // cout << "key: " << key << " and this: " << this->value.first << endl;
+    //compare with actual value
+
+//    if(key == this->value.first){
+//        cout << key << " funnen!"<< endl;
+//        return this;
+//    }
+    if(key != this->value.first) {
+        if(key > this->value.first){
+            //cout << key << " > " << this->value.first << endl;
+            this->right->find(key);
+        }
+        if (key < this->value.first){
+            //cout << key << " < " << this->value.first << endl;
+            this->left->find(key);
+        }
+        
+    }
+    return nullptr; // smthg wrong here
 }
 
 

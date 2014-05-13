@@ -22,7 +22,7 @@ BST_threaded::BST_threaded()
 {
     //ADD CODE
     ELEMENT temp = std::make_pair("", 0);
-    Node *root = new Node(temp);
+    root = new Node(temp);
 }
 
 
@@ -37,8 +37,8 @@ BST_threaded::~BST_threaded()
 bool BST_threaded::empty() const
 {
     //ADD CODE
-    if(left->nullptr){
-        return true;
+    if(root->left == NULL){
+       return true;
     }
     return false;
 }
@@ -82,8 +82,14 @@ ELEMENT& BST_threaded::operator[](string key)
 {
     //ADD CODE
     ELEMENT e("", 0);
-
-    return e; //MUST remove this code
+    //return e; //MUST remove this code
+    
+    Node *temp = root->left->find(key);
+    if(temp!= NULL){
+        cout <<  temp->value.first << " : " << temp->value.second << endl;
+        return temp->value;
+    }
+    return e;
 }
 
 
