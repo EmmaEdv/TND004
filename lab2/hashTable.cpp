@@ -60,7 +60,7 @@ HashTable::HashTable(int tableSize, HASH f, int ml)
 
 
 //Empty the table
-//The Items stored in the collison lists are deleted and the lists are emptied
+//The Items stored in the collision lists are deleted and the lists are emptied
 //TO IMPLEMENT
 void HashTable::makeEmpty()
 {
@@ -68,9 +68,11 @@ void HashTable::makeEmpty()
         //Aida: it leaks memory
         //walk through the lists and delete the items
         while(!theLists[i].empty()){
+            auto it = theLists[i].begin();
+            Item* p = *it;
+            delete p;
             theLists[i].pop_front();
         }
-
     }
 }
 
