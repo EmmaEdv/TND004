@@ -1,4 +1,4 @@
-    #include "spellChecker.h"
+#include "spellChecker.h"
 
 #include <fstream>
 #include <algorithm>
@@ -76,24 +76,9 @@ SpellChecker::~SpellChecker()
     //destroy the dictionary
     delete dictionary;
 
-     misspellings.clear();
-     addedWords.clear();
+    misspellings.clear();
+    addedWords.clear();
 
-    //empty the misspellings
-//    for(int i = 0; i < misspellings.size(); i++){
-//        while(!misspellings.empty()){
-//            misspellings.pop_front();
-//        }
-//    }
-
-
-
-    //empty the addedWords
-//    for(int i = 0; i < addedWords.size(); i++){
-//        while(!addedWords.empty()){
-//            addedWords.pop_front();
-//        }
-//    }
     nWords = 0;
 
     cout << "** Spell Checker Destructor" << endl;
@@ -196,7 +181,6 @@ void SpellChecker::createLog(ostream& os)
     os << "*** LIST OF MISSPELLINGS" << endl;
     os << "=========================" << endl;
 
-    //ADD CODE
     ofstream logFile("log.txt");
     cout << misspellings.size() << endl;
 

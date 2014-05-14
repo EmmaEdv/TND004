@@ -48,10 +48,11 @@ bool Node::insert(ELEMENT v)
             child->l_thread = child->r_thread = true;
             this->left = child;
             this->l_thread = false; //this has a left child ->is_thread? == false
+            //cout << "This is " << this->value.first << " my left child is " << this->left->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
+            return true;
         }
-
-    }//1c. if v > root.value, continue in the right subtree
-    
+    }
+    //1c. if v > root.value, continue in the right subtree
     else if (this->value.first < v.first){
         //does this have any right child? If true --> insert to the right
         if(!this->r_thread){
@@ -63,10 +64,10 @@ bool Node::insert(ELEMENT v)
             child->l_thread = child->r_thread = true;
             this->right = child;
             this->r_thread = false; //this has a right child ->is_thread? == false
-        } 
+            //cout << "This is " << this->value.first << " my right child is " << this->right->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
+            return true;
+        }
     }
-
-    return true;
 }
 
 
@@ -108,24 +109,39 @@ Node* Node::find(string key)
 {
    // cout << "key: " << key << " and this: " << this->value.first << endl;
     //compare with actual value
+    Node *itr = this;
+    cout << "This value is " << itr->value.first << " and I want to find " << key << endl;
 
-    //cout << endl << "called find(" << key << ") once more " << endl;
+    if(key == itr->value.first){
+        cout << key << " funnen!"<< endl;
+        return itr;
+    }
 
-    if(key == this->value.first){
-        //cout << key << " > " << this->value.first << " -> recall" << endl;
-         return this;
+    if(key > itr->value.first){
+        cout << key << " > " << itr->value.first << endl;
+        if(!r_thread){
+            itr = itr->right;
+            cout << "recalling find with this->right = " << itr->value.first << endl;
+            itr->find(key);
+        }
+        else {
+            return nullptr;
+        }
     }
-    else if (key < this->value.first){
-        //cout << key << " < " << this->value.first << " -> recall" << endl;
-        this->left->find(key);
+
+    else if (key < itr->value.first){
+        cout << key << " < " << itr->value.first << endl;
+        if(!l_thread){
+            itr = itr->left;
+            cout << "recalling find with this->left = " << itr->value.first << endl;
+            itr->find(key);
+        }
+        else {
+            return nullptr;
+        }
     }
-    else if(key > this->value.first){
-        //cout << key << " funnen! lämnar nu ok"<< endl << endl;
-        this->right->find(key);
-    }
-    
-    //cout << "key: " << key << " and this: " << this->value.first << endl;
-    return this; // smthg wrong here
+    cout << key << " reached the end!"<< endl;
+    return itr;
 }
 
 
