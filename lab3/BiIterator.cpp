@@ -25,16 +25,16 @@ BiIterator::BiIterator(Node *ptr)
 //Dereferencing operator
 ELEMENT& BiIterator::operator*() const
 {
-    Node *temp = this->current;
-    return temp->value;
+//    Node *temp = this->current;
+//    cout << "hopppsan " << temp->value.first << endl;
+    return this->current->value;
 }
 
 
 //Member access operator
 ELEMENT* BiIterator::operator->() const
 {
-    ELEMENT *e;
-    *e = this->current->value;
+    ELEMENT *e = &(this->current->value);
     return e;
 }
 
@@ -54,7 +54,13 @@ bool BiIterator::operator==(const BiIterator &it) const
 //Inequality comparison operator
 bool BiIterator::operator!=(const BiIterator &it) const
 {
-   //ADD CODE
+    ELEMENT v1 = this->current->value;
+    ELEMENT v2 = *it;
+   // cout << "jajemen, tar hand om detta med dessa värden: " << v1.first << " o " << v2.first<< endl;
+    if(v1 != v2){
+        //cout << "truth! " << endl;
+        return true;
+    }
     return false;
 }
 
@@ -62,7 +68,11 @@ bool BiIterator::operator!=(const BiIterator &it) const
 //Pre increment operator
 BiIterator& BiIterator::operator++()
 {
-   //ADD CODE
+    cout << this->current->value.first << "  nuuuuu -> " << this->current->right->value.first << endl;
+    this->current = this->current->right;
+
+   //if the node that the biiterator is pointing at has a right child - go to the right child,
+   //else follow the thread
     return *this;
 }
 
@@ -71,7 +81,13 @@ BiIterator& BiIterator::operator++()
 //Pos increment operator: see page 277 and 278 of C++ direkt
 BiIterator BiIterator::operator++(int)
 {
-   //ADD CODE
+    //cout << this->current->value.first << endl;
+    if(!this->current->r_thread){
+        this->current = this->current->right->findMin();
+    }
+    else {
+        this->current = this->current->right;
+    }
     return *this;
 }
 
@@ -85,7 +101,13 @@ BiIterator& BiIterator::operator--()
 //Pos decrement operator
 BiIterator BiIterator::operator--(int)
 {
-   //ADD CODE
+    //cout << this->current->value.first << endl;
+    if(!this->current->l_thread){
+        this->current = this->current->left->findMax();
+    }
+    else {
+        this->current = this->current->left;
+    }
     return *this;
 }
 
