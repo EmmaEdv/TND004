@@ -69,7 +69,9 @@ void BST_threaded::insert(ELEMENT v)
 //Remove node with key from the tree
 void BST_threaded::remove(string key)
 {
-   //ADD CODE
+   //1, find the node, their parent and if the child is a right child 
+   //Vänster träd: om båda flaggorna är true -> förälder den som är minst
+   //Höger träd: om båda flaggorna är true -> förälder den som är störst
 }
 
 
