@@ -44,7 +44,7 @@ bool Node::insert(ELEMENT v)
             this->left->insert(v);
         }
         else{//insert
-            Node *child = new Node(v, this, this->right);
+            Node *child = new Node(v, this->left, this);
             child->l_thread = child->r_thread = true;
             this->left = child;
             this->l_thread = false; //this has a left child ->is_thread? == false
@@ -60,7 +60,7 @@ bool Node::insert(ELEMENT v)
         }
         else {
             //insert
-            Node *child = new Node(v, this->left, this);
+            Node *child = new Node(v, this, this->right);
             child->l_thread = child->r_thread = true;
             this->right = child;
             this->r_thread = false; //this has a right child ->is_thread? == false
@@ -137,12 +137,14 @@ Node* Node::find(string key)
 }
 
 
-//Return a pointer to the node storing the smalest value
+//Return a pointer to the node storing the smallest value
 //of the tree whose root is this node
 Node* Node::findMin()
 {
-    //ADD CODE
-    return nullptr;
+    if (!this->l_thread){
+        return this->left->findMin();
+    }
+    return this;
 }
 
 
@@ -150,8 +152,11 @@ Node* Node::findMin()
 //of the tree whose root is this node
 Node* Node::findMax()
 {
-    //ADD CODE
-    return nullptr;
+    if(!this->r_thread){
+       // cout << this->value.first << " not the smallest" << endl;
+        return this->right->findMax();
+    }
+    return this;
 }
 
 
