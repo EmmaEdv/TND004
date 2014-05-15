@@ -82,15 +82,11 @@ ELEMENT& BST_threaded::operator[](string key)
 {
     //ADD CODE
     ELEMENT e("", 0);
-    //return e; //MUST remove this code
-    //cout << "iterator! " << endl;
+
     Node *temp = root->left->find(key);
-    
     if(temp!= nullptr){
-        //cout << "got the value " <<  temp->value.first << " : " << temp->value.second << endl;
         return temp->value;
     }
-    
     return e;
 }
 
@@ -100,14 +96,11 @@ ELEMENT& BST_threaded::operator[](string key)
 //Otherwise, return this->end().
 BiIterator BST_threaded::find(string key) const
 {
-    Node *temp = root->left->find(key);
-    //cout << temp->value.first << endl;
-    if(temp != nullptr){
-        cout << "här var det livat!" << endl;
-        BiIterator dis(temp);
-        return dis;
-    }
-    
+     Node *temp = root->left->find(key);
+     if(temp != nullptr){
+         BiIterator dis(temp);
+         return dis;
+     }
     return end();
 }
 
@@ -124,7 +117,7 @@ BiIterator BST_threaded::begin() const
 BiIterator BST_threaded::end() const
 {
     BiIterator it(root);
-
+    //cout << "end-function!" << endl;
     return it;
 }
 
