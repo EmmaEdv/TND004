@@ -29,13 +29,13 @@ Node::~Node()
 //Insert v in the tree having as root this node
 //Return true, if v was inserted
 //Otherwise, return false --v already exists in the tree
-bool Node::insert(ELEMENT v){
-    
+bool Node::insert(ELEMENT v)
+{
     //1. search for the string of v -> if found counter ++ -> return false
     //1a. if v == root.value -> return false
     if(this->value.first == v.first){
         this->value.second++;
-        return true;
+        return false;
     }
     // if v < root.value, continue in the left subtree
     else if (this->value.first > v.first){
@@ -49,7 +49,7 @@ bool Node::insert(ELEMENT v){
             this->left = child;
             this->l_thread = false; //this has a left child ->is_thread? == false
             //cout << "This is " << this->value.first << " my left child is " << this->left->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
-            return false;
+            return true;
         }
     }
     //1c. if v > root.value, continue in the right subtree
@@ -65,10 +65,9 @@ bool Node::insert(ELEMENT v){
             this->right = child;
             this->r_thread = false; //this has a right child ->is_thread? == false
             //cout << "This is " << this->value.first << " my right child is " << this->right->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
-            return false;
+            return true;
         }
     }
-    return false;
 }
 
 
@@ -108,21 +107,16 @@ void Node::removeMe(Node* parent, bool isRight)
 //If there is no node storing key then return nullptr
 Node* Node::find(string key)
 {
-   // cout << "key: " << key << " and this: " << this->value.first << endl;
     //compare with actual value
     Node *itr = this;
-    //cout << "This value is " << itr->value.first << " and I want to find " << key << endl;
 
     if(key == itr->value.first){
-        //cout << key << " funnen!"<< endl;
         return itr;
     }
 
     if(key > itr->value.first){
-        //cout << key << " > " << itr->value.first << endl;
         if(!r_thread){
             itr = itr->right;
-            //cout << "recalling find with this->right = " << itr->value.first << endl;
             return itr->find(key);
         }
         else {
@@ -131,17 +125,14 @@ Node* Node::find(string key)
     }
 
     else if (key < itr->value.first){
-        //cout << key << " < " << itr->value.first << endl;
         if(!l_thread){
             itr = itr->left;
-            //cout << "recalling find with this->left = " << itr->value.first << endl;
             return itr->find(key);
         }
         else {
             return nullptr;
         }
     }
-    //cout << key << " reached the end! " << itr->value.first<< endl;
     return itr;
 }
 
