@@ -82,11 +82,11 @@ bool Node::remove(string key, Node* parent, bool isRight)
 {
     Node *current = (isRight == true) ? parent->right : parent->left;
     
-    cout << "actual Node is: " << current->value.first << " which is a ";
-    if(isRight)
-        cout << "right child" << endl;
-    else
-        cout << "left child" << endl;
+    //cout << "actual Node is: " << current->value.first << " which is a ";
+   // if(isRight)
+       // cout << "right child" << endl;
+    //else
+       // cout << "left child" << endl;
 
     if(key < current->value.first){
         cout << key << " < " << current->value.first << endl;
@@ -95,7 +95,6 @@ bool Node::remove(string key, Node* parent, bool isRight)
         else{
             cout << key << " was not found " << endl;
             return false;
-            
         }
 
     }
@@ -106,12 +105,10 @@ bool Node::remove(string key, Node* parent, bool isRight)
         else{
             cout << key << " was not found " << endl;
             return false;
-            
         }
-    
     }
     else if(key == current->value.first){
-        cout << "tjoho, nu försvinner " << key << endl;
+       // cout << "tjoho, nu försvinner " << key << endl;
         removeMe(parent,isRight);
         return true;
     }
@@ -131,9 +128,50 @@ bool Node::remove(string key, Node* parent, bool isRight)
 //2a: a right child with only a right child
 //2b: a right child with only a left child
 //2c: a right child with no children
-void Node::removeMe(Node* parent, bool isRight)
-{
-   //ADD CODE
+void Node::removeMe(Node* parent, bool isRight){
+    
+    Node *current = (isRight == true) ? parent->right : parent->left;
+    cout << "removeMe is called, yup! and this node is a ";
+    if(isRight){
+        cout << "right child" << endl;
+        //1. No children -> simply remove current
+        if(current->l_thread && current->r_thread){
+            cout << "current has no children!" << endl;
+            parent->r_thread = true;
+            parent->right = current->right;
+        }
+        
+        //2. a left child
+        else if(!current->l_thread && current->r_thread){
+            cout << "current has a left child!" << endl;
+            
+        }
+        //3. a right child -> move the child to the position of current?
+        else if(current->l_thread && !current->r_thread){
+            cout << "current has a right child!" << endl;
+            
+        }
+    }
+    else{ //(!isRight) == left child
+        cout << "left child" << endl;
+        //1. No children -> simply remove current
+        if(current->l_thread && current->r_thread){
+            cout << "current has no children!" << endl;
+            parent->l_thread = true;
+            parent->left = current->left;
+        }
+        
+        //2. a left child
+        else if(!current->l_thread && current->r_thread){
+            cout << "current has a left child!" << endl;
+            
+        }
+        //3. a right child
+        else if(current->l_thread && !current->r_thread){
+            cout << "current has a right child!" << endl;
+            
+        }
+    }
 }
 
 
