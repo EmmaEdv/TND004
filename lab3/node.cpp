@@ -90,11 +90,25 @@ bool Node::remove(string key, Node* parent, bool isRight)
 
     if(key < current->value.first){
         cout << key << " < " << current->value.first << endl;
-        return remove(key, current, false);
+        if(!current->l_thread)
+            return remove(key, current, false);
+        else{
+            cout << key << " was not found " << endl;
+            return false;
+            
+        }
+
     }
     else if( key > current->value.first){
         cout << key << " > " << current->value.first << endl;
-        return remove(key, current, true);
+        if(!current->r_thread)
+            return remove(key, current, true);
+        else{
+            cout << key << " was not found " << endl;
+            return false;
+            
+        }
+    
     }
     else if(key == current->value.first){
         cout << "tjoho, nu försvinner " << key << endl;
