@@ -68,6 +68,7 @@ bool Node::insert(ELEMENT v)
             return true;
         }
     }
+    return false;
 }
 
 
@@ -79,7 +80,28 @@ bool Node::insert(ELEMENT v)
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight)
 {
-    //ADD CODE
+    Node *current = (isRight == true) ? parent->right : parent->left;
+    
+    cout << "actual Node is: " << current->value.first << " which is a ";
+    if(isRight)
+        cout << "right child" << endl;
+    else
+        cout << "left child" << endl;
+
+    if(key < current->value.first){
+        cout << key << " < " << current->value.first << endl;
+        return remove(key, current, false);
+    }
+    else if( key > current->value.first){
+        cout << key << " > " << current->value.first << endl;
+        return remove(key, current, true);
+    }
+    else if(key == current->value.first){
+        cout << "tjoho, nu försvinner " << key << endl;
+        removeMe(parent,isRight);
+        return true;
+    }
+    
     return false;
 }
 

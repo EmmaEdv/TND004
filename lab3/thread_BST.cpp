@@ -72,6 +72,52 @@ void BST_threaded::remove(string key)
    //1, find the node, their parent and if the child is a right child 
    //Vänster träd: om båda flaggorna är true -> förälder den som är minst
    //Höger träd: om båda flaggorna är true -> förälder den som är störst
+    
+    //1. find the parent node.
+    cout << "jupp, I right at it.." << endl;
+    bool isRemoved = root->left->remove(key, root, false);
+    
+    if(isRemoved)
+        cout << "I removed " << key << " and now it is gone" << endl;
+    else
+        cout << "you crazy basterd, " << key << " wasn't even there... " << endl;
+    
+//    if(current != nullptr){
+//        BiIterator pointis(current);
+//        
+        //if the node is a leaf
+//        if(current->l_thread && current->r_thread){
+//            
+//            //if the value is stored in the left subtree
+//            if(current->left->value.first < root->left->value.first){
+//                cout << "current : "<< current->value.first << " is smaller than root: "  << root->left->value.first << endl;
+//                
+//                parent = (current->left->value.first < current->right->value.first && current->left != root) ? current->left : current->right;
+//                cout << " current: " << current->value.first << " parent node is: " << parent->value.first << endl;
+//            }
+//            //if the value is stored in the right subtree
+//            else {
+//                cout << "current : "<< current->value.first << " is larger than root: "  << root->left->value.first << endl;
+//                parent = (current->left->value.first > current->right->value.first && current->right != root) ? current->left : current->right;
+//                cout << "current: " << current->value.first << " parent node is: " << parent->value.first << endl;
+//            }
+//        }//at least one type
+//        else{
+//            cout << "current has at least one child" << endl;
+//            if(current->value.first < root->left->value.first){
+//                if(current->right->right->left == current){
+//                    parent = current->right->right;
+//                    cout << "current: " << current->value.first << " parent node is: " << parent->value.first << endl;
+//                }
+//            }
+//            else if(current->left->left->right == current){
+//                parent = current->left->left;
+//                cout << "current: " << current->value.first << " parent node is: " << parent->value.first << endl;
+//                
+//            }
+//        }
+//    }
+    
 }
 
 
