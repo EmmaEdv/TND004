@@ -22,7 +22,7 @@ using namespace std;
 bool isNotAlpha(char c)
 {
     //Gör en egen sån hära där vissa tecken är tillåtna. t ex - ´'
-    return ispunct(c);
+    return !(isalnum(c) || (c == '-') || (c == '\'') || (c == '’'));
 }
 
 /*******************************
@@ -101,12 +101,9 @@ int main()
     *******************************************************/
 
     it = table.begin();
-    cout << endl << endl << "nya coola saker!!!!!" << endl << endl;
     for( ; it != table.end(); it++){
         if(it->second == 1){
-           // cout << "I am removing " << it->first << " which occurs " << it->second << " times" << endl;
             table.remove(it->first);
-
         }
     }
 
@@ -127,13 +124,17 @@ int main()
     * PHASE 4: request two words to the user w1 and w2         *
     *          then display all words in the interval [w1,w2]  *
     ************************************************************/
-
-//    string wait;
-//    getline(cin, wait);
-
-    //ADD CODE
-
-
-
+    //We assume that the words entered by the user exists in the table
+    cout << "Please enter two words from the list " << endl;
+    string first, last;
+    cin >> first >> last;
+    cout << "First: " << first << " and last: " << last << endl;
+    BiIterator itr = table.find(first);
+    BiIterator stop = table.find(last);
+    stop++; //a dummy to include the last node
+    for(itr; itr!=stop; itr++){
+        cout << setw(15) << itr->first
+        << setw(15) << itr->second << endl;
+    }
     return 0;
 }
