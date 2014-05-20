@@ -28,14 +28,8 @@ BST_threaded::BST_threaded()
 //destructor
 BST_threaded::~BST_threaded()
 {
-//    BiIterator bee = begin();
-//
-//    while(bee != end()){
-//
-//        Node *temp = bee.current;
-//        delete temp;
-//        bee++;
-//    }
+//    counter = 0;
+//    root->~Node();
 }
 
 
@@ -51,15 +45,6 @@ bool BST_threaded::empty() const
 //Return number of keys (elements) stored in the tree
 int BST_threaded::size() const
 {
-    //cout << "tja" << endl;
-//    BiIterator bee = begin();
-//    int countah = 0;
-//
-//    while(bee != end()){
-//        ++countah;
-//        bee++;
-//    }
-
     return counter;
 }
 
@@ -69,14 +54,13 @@ void BST_threaded::insert(ELEMENT v)
 {
     if (empty())
     {
-        //Insert first node of the BST has a left child of the BST
+        //Insert first node of the BST as a left child of the BST
         root->left = new Node(v, root, root);
         root->left->l_thread = root->left->r_thread = true;
         counter = 1;
     }
     else{
-        counter += root->left->insert(v); //call NODE::insert
-       // cout << "no words is now: " << counter << endl;
+        counter += root->left->insert(v);
     }
 }
 
@@ -84,21 +68,10 @@ void BST_threaded::insert(ELEMENT v)
 //Remove node with key from the tree
 void BST_threaded::remove(string key)
 {
-   //1, find the node, their parent and if the child is a right child
-   //Vänster träd: om båda flaggorna är true -> förälder den som är minst
-   //Höger träd: om båda flaggorna är true -> förälder den som är störst
-
-    //1. find the parent node.
-    //cout << "jupp, I right at it.." << endl;
     bool isRemoved = root->left->remove(key, root, false);
 
     if(isRemoved)
         counter--;
-  //  if(isRemoved)
-    //    cout << "I removed " << key << " and now it is gone" << endl;
-   // else
-  //      cout << "you crazy basterd, " << key << " wasn't even there... " << endl;
-
 }
 
 
@@ -109,7 +82,6 @@ void BST_threaded::remove(string key)
 //then behaviour is undefined
 ELEMENT& BST_threaded::operator[](string key)
 {
-    //ADD CODE
     ELEMENT e("", 0);
 
     Node *temp = root->left->find(key);
@@ -139,7 +111,6 @@ BiIterator BST_threaded::begin() const
 {
     Node *temp = root->left->findMin();
     BiIterator it(temp);
-    //cout << "minimum value is: " << temp->value.first << endl;
     return it;
 }
 
@@ -148,7 +119,6 @@ BiIterator BST_threaded::begin() const
 BiIterator BST_threaded::end() const
 {
     BiIterator it(root);
-    //cout << "end-function!" << endl;
     return it;
 }
 
