@@ -25,8 +25,6 @@ BiIterator::BiIterator(Node *ptr)
 //Dereferencing operator
 ELEMENT& BiIterator::operator*() const
 {
-//    Node *temp = this->current;
-//    cout << "hopppsan " << temp->value.first << endl;
     return this->current->value;
 }
 
