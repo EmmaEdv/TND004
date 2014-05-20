@@ -54,9 +54,7 @@ bool BiIterator::operator!=(const BiIterator &it) const
 {
     ELEMENT v1 = this->current->value;
     ELEMENT v2 = *it;
-   // cout << "jajemen, tar hand om detta med dessa värden: " << v1.first << " o " << v2.first<< endl;
     if(v1 != v2){
-        //cout << "truth! " << endl;
         return true;
     }
     return false;
@@ -66,11 +64,8 @@ bool BiIterator::operator!=(const BiIterator &it) const
 //Pre increment operator
 BiIterator& BiIterator::operator++()
 {
-    cout << this->current->value.first << "  nuuuuu -> " << this->current->right->value.first << endl;
     this->current = this->current->right;
 
-   //if the node that the biiterator is pointing at has a right child - go to the right child,
-   //else follow the thread
     return *this;
 }
 
@@ -79,7 +74,6 @@ BiIterator& BiIterator::operator++()
 //Pos increment operator: see page 277 and 278 of C++ direkt
 BiIterator BiIterator::operator++(int)
 {
-    //cout << this->current->value.first << endl;
     if(!this->current->r_thread){
         this->current = this->current->right->findMin();
     }
@@ -92,14 +86,13 @@ BiIterator BiIterator::operator++(int)
 //Pre decrement operator
 BiIterator& BiIterator::operator--()
 {
-   //ADD CODE
+    this->current = this->current->left;
     return *this;
 }
 
 //Pos decrement operator
 BiIterator BiIterator::operator--(int)
 {
-    //cout << this->current->value.first << endl;
     if(!this->current->l_thread){
         this->current = this->current->left->findMax();
     }
