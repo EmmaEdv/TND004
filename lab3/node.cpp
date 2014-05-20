@@ -41,7 +41,7 @@ bool Node::insert(ELEMENT v)
     else if (this->value.first > v.first){
         //does this have any left child? If true --> insert to the left
         if(!this->l_thread){
-            this->left->insert(v);
+            return this->left->insert(v);
         }
         else{//insert
             Node *child = new Node(v, this->left, this);
@@ -56,7 +56,7 @@ bool Node::insert(ELEMENT v)
     else if (this->value.first < v.first){
         //does this have any right child? If true --> insert to the right
         if(!this->r_thread){
-            this->right->insert(v);
+            return this->right->insert(v);
         }
         else {
             //insert
@@ -68,7 +68,7 @@ bool Node::insert(ELEMENT v)
             return true;
         }
     }
-    return false;
+    //return true;
 }
 
 
@@ -80,39 +80,40 @@ bool Node::insert(ELEMENT v)
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight)
 {
-    Node *current = (isRight == true) ? parent->right : parent->left;
-    
-    //cout << "actual Node is: " << current->value.first << " which is a ";
-   // if(isRight)
-       // cout << "right child" << endl;
-    //else
-       // cout << "left child" << endl;
-
-    if(key < current->value.first){
-        cout << key << " < " << current->value.first << endl;
-        if(!current->l_thread)
-            return remove(key, current, false);
+    if(key < value.first){
+     //  cout << key << " < " << value.first << endl;
+        if(!l_thread)
+            return left->remove(key, this, false);
         else{
-            cout << key << " was not found " << endl;
+        //    cout << key << " was not found " << endl;
             return false;
         }
 
     }
-    else if( key > current->value.first){
-        cout << key << " > " << current->value.first << endl;
-        if(!current->r_thread)
-            return remove(key, current, true);
+    else if( key > value.first){
+     //   cout << key << " > " << value.first << endl;
+        if(!r_thread)
+            return right->remove(key, this, true);
         else{
-            cout << key << " was not found " << endl;
+    //        cout << key << " was not found " << endl;
             return false;
         }
     }
-    else if(key == current->value.first){
-       // cout << "tjoho, nu försvinner " << key << endl;
-        removeMe(parent,isRight);
-        return true;
+    else if(key == value.first){
+        //if two children
+        if(!r_thread && !l_thread){
+            //cout << key << " has two kids! " << endl;
+            value = left->findMax()->value;
+            return left->remove(value.first, this, false);
+        }
+
+        else{
+          //  cout << "tjoho, nu försvinner " << key << endl;
+            removeMe(parent,isRight);
+            return true;
+        }
     }
-    
+
     return false;
 }
 
@@ -129,47 +130,61 @@ bool Node::remove(string key, Node* parent, bool isRight)
 //2b: a right child with only a left child
 //2c: a right child with no children
 void Node::removeMe(Node* parent, bool isRight){
-    
-    Node *current = (isRight == true) ? parent->right : parent->left;
-    cout << "removeMe is called, yup! and this node is a ";
+
+   // Node *current = (isRight == true) ? parent->right : parent->left;
+   // cout << "removeMe is called, yup! and this node is a ";
     if(isRight){
-        cout << "right child" << endl;
-        //1. No children -> simply remove current
-        if(current->l_thread && current->r_thread){
-            cout << "current has no children!" << endl;
+     //   cout << "right child" << endl;
+        //1. A right child with no children -> simply remove current
+        if(this->l_thread && this->r_thread){
+      //      cout << "right tree has no children!" << endl;
             parent->r_thread = true;
-            parent->right = current->right;
+            parent->right = this->right;
+            delete this;
         }
-        
-        //2. a left child
-        else if(!current->l_thread && current->r_thread){
-            cout << "current has a left child!" << endl;
-            
+
+        //2. a right child with a left child
+        else if(!this->l_thread && this->r_thread){
+         //   cout << "right tree has a left child!" << endl;
+            parent->right = this->left;
+            Node * temp = parent->right->findMax();
+            temp->right = this->right;
+            delete this;
         }
-        //3. a right child -> move the child to the position of current?
-        else if(current->l_thread && !current->r_thread){
-            cout << "current has a right child!" << endl;
-            
+        //3. a right child with a right child
+        else if(this->l_thread && !this->r_thread){
+       //     cout << "right tree has a right child!" << endl;
+            parent->right = this->right;
+            Node * temp = parent->right->findMin();
+            temp->left = this->left;
+            delete this;
         }
     }
     else{ //(!isRight) == left child
-        cout << "left child" << endl;
+      //  cout << "left child" << endl;
         //1. No children -> simply remove current
-        if(current->l_thread && current->r_thread){
-            cout << "current has no children!" << endl;
+        if(this->l_thread && this->r_thread){
+          //  cout << "left tree has no children!" << endl;
             parent->l_thread = true;
-            parent->left = current->left;
+            parent->left = this->left;
+            delete this;
         }
-        
-        //2. a left child
-        else if(!current->l_thread && current->r_thread){
-            cout << "current has a left child!" << endl;
-            
+
+        //2. a left child with left child
+        else if(!this->l_thread && this->r_thread){
+         //   cout << "left tree has a left child!" << endl;
+            parent->left = this->left;
+            Node * temp = parent->left->findMax();
+            temp->right = this->right;
+            delete this;
         }
-        //3. a right child
-        else if(current->l_thread && !current->r_thread){
-            cout << "current has a right child!" << endl;
-            
+        //3. left child with a right child
+        else if(this->l_thread && !this->r_thread){
+          //  cout << "left tree has a right child!" << endl;
+            parent->left = this->right;
+            Node * temp = parent->left->findMin();
+            temp->left = this->left;
+            delete this;
         }
     }
 }
