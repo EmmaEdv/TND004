@@ -22,7 +22,11 @@ Node::Node(ELEMENT v, Node *l, Node *r)
 //recursively deletes the nodes in the left_subtree and right-subtree
 Node::~Node()
 {
-    //ADD CODE
+    Node *temp = findMin();
+    while(temp != findMax()){
+        delete temp;
+        temp = findMin();
+    }
 }
 
 
@@ -31,15 +35,16 @@ Node::~Node()
 //Otherwise, return false --v already exists in the tree
 bool Node::insert(ELEMENT v)
 {
-    //1. search for the string of v -> if found counter ++ -> return false
-    //1a. if v == root.value -> return false
+    //search for the string of v
+
+    //if the word exists, increment the counter and return false
     if(this->value.first == v.first){
         this->value.second++;
         return false;
     }
-    // if v < root.value, continue in the left subtree
+    // if v is smaller than the value of the node, continue in the left subtree
     else if (this->value.first > v.first){
-        //does this have any left child? If true --> insert to the left
+        //if this has a left child, recursive call
         if(!this->l_thread){
             return this->left->insert(v);
         }
@@ -47,28 +52,24 @@ bool Node::insert(ELEMENT v)
             Node *child = new Node(v, this->left, this);
             child->l_thread = child->r_thread = true;
             this->left = child;
-            this->l_thread = false; //this has a left child ->is_thread? == false
-            //cout << "This is " << this->value.first << " my left child is " << this->left->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
+            this->l_thread = false;
             return true;
         }
     }
-    //1c. if v > root.value, continue in the right subtree
+    //if v is larger than the value of the node, continue in the right subtree
     else if (this->value.first < v.first){
-        //does this have any right child? If true --> insert to the right
+        //if this has a right child, recursive call
         if(!this->r_thread){
             return this->right->insert(v);
         }
         else {
-            //insert
             Node *child = new Node(v, this, this->right);
             child->l_thread = child->r_thread = true;
             this->right = child;
-            this->r_thread = false; //this has a right child ->is_thread? == false
-            //cout << "This is " << this->value.first << " my right child is " << this->right->value.first << " and my right flag is " << this->r_thread << " and my left flag is " << this->l_thread << endl;
+            this->r_thread = false;
             return true;
         }
     }
-    //return true;
 }
 
 
@@ -80,35 +81,34 @@ bool Node::insert(ELEMENT v)
 //isRight==true: this node is right child of parent
 bool Node::remove(string key, Node* parent, bool isRight)
 {
+    //if key is smaller than the value
     if(key < value.first){
-     //  cout << key << " < " << value.first << endl;
+        //check if the node storing key has a left child, if so continue
         if(!l_thread)
             return left->remove(key, this, false);
         else{
-        //    cout << key << " was not found " << endl;
             return false;
         }
-
     }
-    else if( key > value.first){
-     //   cout << key << " > " << value.first << endl;
+    // if the key is larger than the value
+    else if(key > value.first){
+        //check if the node storing key has a right child, if so continue
         if(!r_thread)
             return right->remove(key, this, true);
         else{
-    //        cout << key << " was not found " << endl;
             return false;
         }
     }
+    //if the key is found
     else if(key == value.first){
-        //if two children
+        //check if the node storing key has any children,
+        //if so replace root with the largest value of the left subtree and remove the leaf
         if(!r_thread && !l_thread){
-            //cout << key << " has two kids! " << endl;
             value = left->findMax()->value;
             return left->remove(value.first, this, false);
         }
-
+        //else remove the node
         else{
-          //  cout << "tjoho, nu försvinner " << key << endl;
             removeMe(parent,isRight);
             return true;
         }
@@ -130,57 +130,44 @@ bool Node::remove(string key, Node* parent, bool isRight)
 //2b: a right child with only a left child
 //2c: a right child with no children
 void Node::removeMe(Node* parent, bool isRight){
-
-   // Node *current = (isRight == true) ? parent->right : parent->left;
-   // cout << "removeMe is called, yup! and this node is a ";
     if(isRight){
-     //   cout << "right child" << endl;
-        //1. A right child with no children -> simply remove current
+        //2c: a right child with no children
         if(this->l_thread && this->r_thread){
-      //      cout << "right tree has no children!" << endl;
             parent->r_thread = true;
             parent->right = this->right;
             delete this;
         }
-
-        //2. a right child with a left child
+        //2b: a right child with only a left child
         else if(!this->l_thread && this->r_thread){
-         //   cout << "right tree has a left child!" << endl;
             parent->right = this->left;
             Node * temp = parent->right->findMax();
             temp->right = this->right;
             delete this;
         }
-        //3. a right child with a right child
+        //2a: a right child with only a right child
         else if(this->l_thread && !this->r_thread){
-       //     cout << "right tree has a right child!" << endl;
             parent->right = this->right;
             Node * temp = parent->right->findMin();
             temp->left = this->left;
             delete this;
         }
     }
-    else{ //(!isRight) == left child
-      //  cout << "left child" << endl;
-        //1. No children -> simply remove current
+    else{
+        //1c: a left child with no children
         if(this->l_thread && this->r_thread){
-          //  cout << "left tree has no children!" << endl;
             parent->l_thread = true;
             parent->left = this->left;
             delete this;
         }
-
-        //2. a left child with left child
+        //1b: a left child with only a left child
         else if(!this->l_thread && this->r_thread){
-         //   cout << "left tree has a left child!" << endl;
             parent->left = this->left;
             Node * temp = parent->left->findMax();
             temp->right = this->right;
             delete this;
         }
-        //3. left child with a right child
+        //1a: a left child with only a right child
         else if(this->l_thread && !this->r_thread){
-          //  cout << "left tree has a right child!" << endl;
             parent->left = this->right;
             Node * temp = parent->left->findMin();
             temp->left = this->left;
@@ -202,8 +189,9 @@ Node* Node::find(string key)
     if(key == itr->value.first){
         return itr;
     }
-
+    //if the key is larger than this node
     if(key > itr->value.first){
+        //if this has a right child, recursive call
         if(!r_thread){
             itr = itr->right;
             return itr->find(key);
@@ -212,8 +200,9 @@ Node* Node::find(string key)
             return nullptr;
         }
     }
-
+    //if the key is smaller than this node
     else if (key < itr->value.first){
+        //if this has a left child, recursive call
         if(!l_thread){
             itr = itr->left;
             return itr->find(key);
@@ -242,7 +231,6 @@ Node* Node::findMin()
 Node* Node::findMax()
 {
     if(!this->r_thread){
-       // cout << this->value.first << " not the smallest" << endl;
         return this->right->findMax();
     }
     return this;
