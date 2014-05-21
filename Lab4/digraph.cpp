@@ -83,11 +83,13 @@ void Digraph::uwsssp(int s)
         //cout << "jag har dekjuat " << endl;
         Node *temp = array[v].getFirst();
        // cout << "first in list is " << temp->vertex << endl;
+        //While the queued node points somewhere
         while(temp != nullptr){
+            //if the node is not visited
             if(!done[temp->vertex]){
-                //cout << "temp->vertex is " << temp->vertex << endl;
-                dist[temp->vertex] = dist[v]++;
-                path[temp->vertex] = v;
+                cout << "temp->vertex is " << temp->vertex << " and v is " << v << endl;
+                dist[temp->vertex] = (dist[v]+1 < dist[temp->vertex] ? dist[v]+1 : dist[temp->vertex]);
+                path[temp->vertex] = (temp->vertex == s ? 0 : v);
                 done[temp->vertex] = true;
                 Q.enqueue(temp->vertex);
             }
@@ -126,8 +128,8 @@ void Digraph::pwsssp(int s)
         while(temp != nullptr){
             if(!done[temp->vertex]){
                 //cout << "temp->vertex is " << temp->vertex << endl;
-                dist[temp->vertex] = dist[v]+temp->weight;
-                path[temp->vertex] = v;
+                dist[temp->vertex] = (dist[v]+temp->weight < dist[temp->vertex] ? dist[v]+temp->weight : dist[temp->vertex]);
+                path[temp->vertex] = (temp->vertex == s ? 0 : v);
                 done[temp->vertex] = true;
                 Q.enqueue(temp->vertex);
             }
@@ -176,6 +178,38 @@ void Digraph::printPath(int t) const
          return;
     }
 
+    
     // *** TODO ***
-    uwsssp(t);
+    if(dist[t] != 0){
+        //store the actual value, and call recursively..
+        printPath(path[t]);
+    }
+    else{
+        cout << " " << t << " -> " << endl;
+    }
+    
+//    int start = 0;
+//    int index = 0;
+//    while(index != size){
+//        if(dist[index]==0){
+//            start = index;
+//            break;
+//        }
+//        index++;
+//    }
+//    int itr = t;
+//    int temp[dist[t]];
+//    int i = dist[t];
+//    cout << " " << dist[t] << endl;
+//    while(i >= 0){
+//        cout << "tjip: " << i << endl;
+//        temp[i] = itr;
+//        itr = path[itr];
+//        i--;
+//    }
+//    for(int i = 0; i<=dist[t]; i++){
+//        cout << temp[i] << " ";
+//        if(i < dist[t])
+//            cout << "-> ";
+//    }
 }
