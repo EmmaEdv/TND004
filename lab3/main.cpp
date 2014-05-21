@@ -1,10 +1,10 @@
 /**********************************************
-* File: main.cpp                              *
-* Author: Aida Nordman                        *
-* Course: TND004, Lab 3                       *
-* Date: VT2, 2014                             *
-* Description: frequency table                *
-* DO NOT MODIFY                               *
+* File: main.cpp *
+* Author: Aida Nordman *
+* Course: TND004, Lab 3 *
+* Date: VT2, 2014 *
+* Description: frequency table *
+* DO NOT MODIFY *
 ***********************************************/
 
 #include "threaded_BST.h"
@@ -26,7 +26,7 @@ bool isNotAlpha(char c)
 }
 
 /*******************************
-* 2. Main function             *
+* 2. Main function *
 ********************************/
 
 
@@ -37,9 +37,9 @@ int main()
     string name;
 
     /******************************************************
-    * PHASE 0: Load the words in the text file            *
-    *          into a the table                           *
-    *******************************************************/
+* PHASE 0: Load the words in the text file *
+* into a the table *
+*******************************************************/
 
     cout << "File name? ";
     getline(cin, name);
@@ -72,11 +72,11 @@ int main()
     textFile.close();
 
     /******************************************************
-    * PHASE 1: Display                                    *
-    * - number of words in the text                       *
-    * - number of unique words (occurring only once)      *
-    * - frequency table                                   *
-    *******************************************************/
+* PHASE 1: Display *
+* - number of words in the text *
+* - number of unique words (occurring only once) *
+* - frequency table *
+*******************************************************/
     //number of words in the text
     cout << "The number of words in the text file is: " << nWords << endl;
     cout << "Number of unique words in the file: " << table.size() << endl;
@@ -86,7 +86,7 @@ int main()
 
     BiIterator it = table.begin();
 
-    cout << "  \tKEY" << "\tCOUNTER" << endl;
+    cout << " \tKEY" << "\tCOUNTER" << endl;
     cout << "==============================\n";
     for( ; it != table.end(); it++)
     {
@@ -96,15 +96,19 @@ int main()
 
 
     /******************************************************
-    * PHASE 3: remove all words with counter 1            *
-    *          and display table again                    *
-    *******************************************************/
+* PHASE 3: remove all words with counter 1 *
+* and display table again *
+*******************************************************/
 
     it = table.begin();
+    vector<string> temp;
     for( ; it != table.end(); it++){
         if(it->second == 1){
-            table.remove(it->first);
+            temp.push_back(it->first);
         }
+    }
+    for(int i = 0; i != temp.size(); i ++){
+        table.remove(temp[i]);
     }
 
 
@@ -112,7 +116,7 @@ int main()
 
     cout << "Un-unique table sorted alphabetically:" << endl;
 
-    cout << "  \tKEY" << "\tCOUNTER" << endl;
+    cout << " \tKEY" << "\tCOUNTER" << endl;
     cout << "==============================\n";
     for(it = table.begin(); it != table.end(); it++) {
          cout << setw(15) << it->first
@@ -121,9 +125,9 @@ int main()
 
 
     /***********************************************************
-    * PHASE 4: request two words to the user w1 and w2         *
-    *          then display all words in the interval [w1,w2]  *
-    ************************************************************/
+* PHASE 4: request two words to the user w1 and w2 *
+* then display all words in the interval [w1,w2] *
+************************************************************/
     //We assume that the words entered by the user exists in the table
     cout << "Please enter two words from the list " << endl;
     string first, last;
@@ -131,10 +135,10 @@ int main()
     cout << "First: " << first << " and last: " << last << endl;
     BiIterator itr = table.find(first);
     BiIterator stop = table.find(last);
-    stop++; //a dummy to include the last node
-    for(itr; itr!=stop; itr++){
-        cout << setw(15) << itr->first
-        << setw(15) << itr->second << endl;
+    itr--; //a dummy to include the last node
+    for(stop; stop!=itr; stop--){
+        cout << setw(15) << stop->first
+        << setw(15) << stop->second << endl;
     }
     return 0;
 }
