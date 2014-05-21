@@ -1,9 +1,9 @@
 /**********************************************
-* File: node.cpp                              *
-* Author: Aida Nordman                        *
-* Course: TND004, Lab 3                       *
-* Date: VT2, 2014                             *
-* Description: class Node                     *
+* File: node.cpp *
+* Author: Aida Nordman *
+* Course: TND004, Lab 3 *
+* Date: VT2, 2014 *
+* Description: class Node *
 ***********************************************/
 
 #include "node.h"
@@ -22,10 +22,13 @@ Node::Node(ELEMENT v, Node *l, Node *r)
 //recursively deletes the nodes in the left_subtree and right-subtree
 Node::~Node()
 {
-    Node *temp = findMin();
-    while(temp != findMax()){
-        delete temp;
-        temp = findMin();
+    //Left subtree
+    if(!this->l_thread){
+        delete left;
+    }
+    //Right subtree
+    if(!this->r_thread){
+        delete right;
     }
 }
 
@@ -113,7 +116,6 @@ bool Node::remove(string key, Node* parent, bool isRight)
             return true;
         }
     }
-
     return false;
 }
 
@@ -135,21 +137,18 @@ void Node::removeMe(Node* parent, bool isRight){
         if(this->l_thread && this->r_thread){
             parent->r_thread = true;
             parent->right = this->right;
-            delete this;
         }
         //2b: a right child with only a left child
-        else if(!this->l_thread && this->r_thread){
+        else if(!this->l_thread &&  this->r_thread){
             parent->right = this->left;
-            Node * temp = parent->right->findMax();
+            Node *temp = parent->right->findMax();
             temp->right = this->right;
-            delete this;
         }
         //2a: a right child with only a right child
         else if(this->l_thread && !this->r_thread){
             parent->right = this->right;
-            Node * temp = parent->right->findMin();
+            Node *temp = parent->right->findMin();
             temp->left = this->left;
-            delete this;
         }
     }
     else{
@@ -157,23 +156,22 @@ void Node::removeMe(Node* parent, bool isRight){
         if(this->l_thread && this->r_thread){
             parent->l_thread = true;
             parent->left = this->left;
-            delete this;
         }
         //1b: a left child with only a left child
         else if(!this->l_thread && this->r_thread){
             parent->left = this->left;
-            Node * temp = parent->left->findMax();
+            Node *temp = parent->left->findMax();
             temp->right = this->right;
-            delete this;
         }
         //1a: a left child with only a right child
         else if(this->l_thread && !this->r_thread){
             parent->left = this->right;
-            Node * temp = parent->left->findMin();
+            Node *temp = parent->left->findMin();
             temp->left = this->left;
-            delete this;
         }
     }
+    this->l_thread = this->r_thread = true;
+    delete this;
 }
 
 
