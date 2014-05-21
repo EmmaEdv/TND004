@@ -1,10 +1,10 @@
 /********************************************************
-* File: threaded_BST.cpp                                *
-* Author: Aida Nordman                                  *
-* Course: TND004, Lab 3                                 *
-* Date: VT2, 2014                                       *
-* Description: class BST_threaded representing          *
-*              a threaded binary search tree            *
+* File: threaded_BST.cpp *
+* Author: Aida Nordman *
+* Course: TND004, Lab 3 *
+* Date: VT2, 2014 *
+* Description: class BST_threaded representing *
+* a threaded binary search tree *
 *********************************************************/
 
 #include "threaded_BST.h"
@@ -24,12 +24,13 @@ BST_threaded::BST_threaded()
     root = new Node(temp);
 }
 
-
 //destructor
+//Delete all nodes in the BST, including the dummy node.
 BST_threaded::~BST_threaded()
 {
-//    counter = 0;
-//    root->~Node();
+    counter = 0;
+    root->~Node();
+
 }
 
 
