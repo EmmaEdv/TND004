@@ -1,10 +1,10 @@
 /**********************************************
-* File: BiIterator.cpp                        *
-* Author: Aida Nordman                        *
-* Course: TND004, Lab 2                       *
-* Date: VT2, 2014                             *
-* Description: class biIterator               *
-* Represents bidirectional iterators          *
+* File: BiIterator.cpp *
+* Author: Aida Nordman *
+* Course: TND004, Lab 2 *
+* Date: VT2, 2014 *
+* Description: class biIterator *
+* Represents bidirectional iterators *
 ***********************************************/
 
 
@@ -64,16 +64,6 @@ bool BiIterator::operator!=(const BiIterator &it) const
 //Pre increment operator
 BiIterator& BiIterator::operator++()
 {
-    this->current = this->current->right;
-
-    return *this;
-}
-
-
-
-//Pos increment operator: see page 277 and 278 of C++ direkt
-BiIterator BiIterator::operator++(int)
-{
     if(!this->current->r_thread){
         this->current = this->current->right->findMin();
     }
@@ -83,15 +73,18 @@ BiIterator BiIterator::operator++(int)
     return *this;
 }
 
-//Pre decrement operator
-BiIterator& BiIterator::operator--()
+
+
+//Pos increment operator: see page 277 and 278 of C++ direkt
+BiIterator BiIterator::operator++(int)
 {
-    this->current = this->current->left;
-    return *this;
+    BiIterator temp = this;
+    operator++();
+    return temp;
 }
 
-//Pos decrement operator
-BiIterator BiIterator::operator--(int)
+//Pre decrement operator
+BiIterator& BiIterator::operator--()
 {
     if(!this->current->l_thread){
         this->current = this->current->left->findMax();
@@ -100,6 +93,14 @@ BiIterator BiIterator::operator--(int)
         this->current = this->current->left;
     }
     return *this;
+}
+
+//Pos decrement operator
+BiIterator BiIterator::operator--(int)
+{
+    BiIterator temp = this;
+    operator--();
+    return temp;
 }
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
