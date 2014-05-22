@@ -184,9 +184,7 @@ void Digraph::printPath(int t) const
         //store the actual value, and call recursively..
         printPath(path[t]);
     }
-    else{
-        cout << " " << t << " -> " << endl;
-    }
+    cout << " " << t;
     
 //    int start = 0;
 //    int index = 0;
