@@ -1,7 +1,7 @@
 /*********************************************
-* file:	~\tnd004\lab\lab4b\graph.h           *
+* file: ~\tnd004\lab\lab4b\graph.h *
 * remark:implementation of undirected graphs *
-* file for students                          *
+* file for students *
 **********************************************/
 
 
@@ -24,7 +24,7 @@ Graph::Graph(int n)
 {
     assert(n >= 1);
     array = new List[n + 1];
-    size  = n;
+    size = n;
 }
 
 // -- DESTRUCTOR
@@ -62,60 +62,77 @@ void Graph::mstPrim() const
     int dist[size+1];
     bool done[size+1];
     int path[size+1];
-    // bool cloud[size+1];
-    
-    for(int i=1; i<size+1; i++){
+    Edge edges[size];
+
+    for(int i=0; i<size+1; i++){
         done[i] = false;
         dist[i] = INFINITY;
         path[i] = 0;
     }
-    
+
     int nextNode= 1;
     dist[nextNode] = 0;
     done[nextNode] = true;
-    
-    bool allVisited = false;
-    
-    while(nextNode < 8){
+
+    //bool allVisited = false;
+    int nEdges = 0;
+    while(nEdges <= size){
         //1. Adding a node to the cloud
-        cout << "nextNode is: " << nextNode << endl;
         done[nextNode] = true;
-        int nextCloudMember = INFINITY;
+        int nextCloudMember = 0;
+        //int tail = 0;
         //Loop through all connecting edges of the cloud
+//        allVisited = true;
         for(int i = 1; i < size+1; i++){
             if(done[i]){
-                cout << " node " << i << " is searching.. " << endl;
                 Node *temp = array[i].getFirst();
+                //tail = i;
                 while (temp != nullptr){
                     if(!done[temp->vertex]){
-                        cout << " HEJ cloud: " << temp->vertex << endl;
+                       // allVisited = false;
                         path[temp->vertex] = nextNode;
                         dist[temp->vertex] = temp->weight;
                         //Save closest neighbor to the cloud
-                        //kolla närmsta vägen till de grannar till noden som ej är visited
-                        //nextCloudMember = closestNeighbor;
+                        if(dist[temp->vertex] < dist[nextCloudMember]){
+                            nextCloudMember = temp->vertex;
+                            //tail = i;
+                            cout << " next: "<< nextCloudMember << " tail: " << path[nextCloudMember] << " weight: " << dist[nextCloudMember] <<endl;
+                        }
                     }
                     temp = temp->next;
                 }
             }
-            nextNode++;
-            //cout << "updated nextNode: " << nextNode << endl;
-            done[2] = done[3] = true;
         }
+        edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
+        nextNode = nextCloudMember;
+        nEdges++;
+    }
+    for(int i = 0; i<size+1; i++){
+        cout << edges[i] << endl;
     }
 }
-
 // Kruskal's minimum spanning tree algorithm
 void Graph::mstKruskal() const
 {
     // *** TODO ***
+    //Max no of edges is size
+//    Heap H;
+    DSets D(size+1);
+
+//    H.Heap(size);
+
+    int counter = 0;
+
+    while (counter < size){
+
+    }
 }
 
 // print graph
 void Graph::printGraph() const
 {
     cout << "------------------------------------------------------------------" << endl;
-    cout << "vertex  adjacency list                                            " << endl;
+    cout << "vertex adjacency list " << endl;
     cout << "------------------------------------------------------------------" << endl;
 
     for (int v = 1; v <= size; v++)
