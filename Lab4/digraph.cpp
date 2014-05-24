@@ -186,28 +186,4 @@ void Digraph::printPath(int t) const
     }
     cout << " " << t;
     
-//    int start = 0;
-//    int index = 0;
-//    while(index != size){
-//        if(dist[index]==0){
-//            start = index;
-//            break;
-//        }
-//        index++;
-//    }
-//    int itr = t;
-//    int temp[dist[t]];
-//    int i = dist[t];
-//    cout << " " << dist[t] << endl;
-//    while(i >= 0){
-//        cout << "tjip: " << i << endl;
-//        temp[i] = itr;
-//        itr = path[itr];
-//        i--;
-//    }
-//    for(int i = 0; i<=dist[t]; i++){
-//        cout << temp[i] << " ";
-//        if(i < dist[t])
-//            cout << "-> ";
-//    }
 }

@@ -62,7 +62,7 @@ void Graph::mstPrim() const
     int dist[size+1];
     bool done[size+1];
     int path[size+1];
-    Edge edges[size];
+    //Edge edges[size];
 
     for(int i=0; i<size+1; i++){
         done[i] = false;
@@ -101,13 +101,13 @@ void Graph::mstPrim() const
             }
         }
         
-        edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
+        //edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
         nextNode = nextCloudMember;
         cout << "END OF LOOP:\n next: "<< nextCloudMember << " tail: " << path[nextCloudMember] << " weight: " << dist[nextCloudMember] <<endl;
         nEdges++;
     }
     for(int i = 0; i<size+1; i++){
-        cout << edges[i] << endl;
+       // cout << edges[i] << endl;
     }
 }
 // Kruskal's minimum spanning tree algorithm
@@ -115,16 +115,15 @@ void Graph::mstKruskal() const
 {
     // *** TODO ***
     //Max no of edges is size
-//    Heap H;
     DSets D(size+1);
 
-//    H.Heap(size);
+    Heap<int> H(size);
 
     int counter = 0;
 
-    while (counter < size){
-
-    }
+//    while (counter < size){
+//
+//    }
 }
 
 // print graph
