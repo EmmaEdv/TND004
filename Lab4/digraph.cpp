@@ -86,9 +86,9 @@ void Digraph::uwsssp(int s)
         //While the queued node points somewhere
         while(temp != nullptr){
             //if the node is not visited
-            if(!done[temp->vertex]){
+            if(dist[v]+1 < dist[temp->vertex] ){
                 cout << "temp->vertex is " << temp->vertex << " and v is " << v << endl;
-                dist[temp->vertex] = (dist[v]+1 < dist[temp->vertex] ? dist[v]+1 : dist[temp->vertex]);
+                dist[temp->vertex] = dist[v]+1;
                 path[temp->vertex] = (temp->vertex == s ? 0 : v);
                 done[temp->vertex] = true;
                 Q.enqueue(temp->vertex);
@@ -126,9 +126,9 @@ void Digraph::pwsssp(int s)
         Node *temp = array[v].getFirst();
        // cout << "first in list is " << temp->vertex << endl;
         while(temp != nullptr){
-            if(!done[temp->vertex]){
+            if(dist[v]+temp->weight < dist[temp->vertex]){
                 //cout << "temp->vertex is " << temp->vertex << endl;
-                dist[temp->vertex] = (dist[v]+temp->weight < dist[temp->vertex] ? dist[v]+temp->weight : dist[temp->vertex]);
+                dist[temp->vertex] = dist[v]+temp->weight;
                 path[temp->vertex] = (temp->vertex == s ? 0 : v);
                 done[temp->vertex] = true;
                 Q.enqueue(temp->vertex);
