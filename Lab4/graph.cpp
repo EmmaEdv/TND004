@@ -73,38 +73,37 @@ void Graph::mstPrim() const
     int nextNode= 1;
     dist[nextNode] = 0;
     done[nextNode] = true;
-
-    //bool allVisited = false;
+    int nextCloudMember = 0;
     int nEdges = 0;
-    while(nEdges <= size){
+    
+    while(nEdges < size-1){
         //1. Adding a node to the cloud
         done[nextNode] = true;
-        int nextCloudMember = 0;
-        //int tail = 0;
+        nextCloudMember = 0;
         //Loop through all connecting edges of the cloud
-//        allVisited = true;
         for(int i = 1; i < size+1; i++){
             if(done[i]){
                 Node *temp = array[i].getFirst();
-                //tail = i;
                 while (temp != nullptr){
+                    //loop trough the connections of the node
                     if(!done[temp->vertex]){
-                       // allVisited = false;
-                        path[temp->vertex] = nextNode;
-                        dist[temp->vertex] = temp->weight;
-                        //Save closest neighbor to the cloud
-                        if(dist[temp->vertex] < dist[nextCloudMember]){
-                            nextCloudMember = temp->vertex;
-                            //tail = i;
-                            cout << " next: "<< nextCloudMember << " tail: " << path[nextCloudMember] << " weight: " << dist[nextCloudMember] <<endl;
+                        //if a shorter path is found, update
+                        if(temp->weight < dist[temp->vertex]){
+                            path[temp->vertex] = i;
+                            dist[temp->vertex] = temp->weight;
                         }
+                        //Save closest neighbor to the cloud
+                        nextCloudMember = dist[temp->vertex] < dist[nextCloudMember] ? temp->vertex : nextCloudMember;
+
                     }
                     temp = temp->next;
                 }
             }
         }
+        
         edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
         nextNode = nextCloudMember;
+        cout << "END OF LOOP:\n next: "<< nextCloudMember << " tail: " << path[nextCloudMember] << " weight: " << dist[nextCloudMember] <<endl;
         nEdges++;
     }
     for(int i = 0; i<size+1; i++){
