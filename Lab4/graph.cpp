@@ -62,7 +62,7 @@ void Graph::mstPrim() const
     int dist[size+1];
     bool done[size+1];
     int path[size+1];
-    //Edge edges[size];
+    Edge edges[size];
 
     for(int i=0; i<size+1; i++){
         done[i] = false;
@@ -75,7 +75,7 @@ void Graph::mstPrim() const
     done[nextNode] = true;
     int nextCloudMember = 0;
     int nEdges = 0;
-    
+
     while(nEdges < size-1){
         //1. Adding a node to the cloud
         done[nextNode] = true;
@@ -100,14 +100,13 @@ void Graph::mstPrim() const
                 }
             }
         }
-        
-        //edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
+
+        edges[nEdges] = Edge(nextCloudMember, path[nextCloudMember], dist[nextCloudMember]);
         nextNode = nextCloudMember;
-        cout << "END OF LOOP:\n next: "<< nextCloudMember << " tail: " << path[nextCloudMember] << " weight: " << dist[nextCloudMember] <<endl;
         nEdges++;
     }
-    for(int i = 0; i<size+1; i++){
-       // cout << edges[i] << endl;
+    for(int i = 0; i<size-1; i++){
+        cout << edges[i] << endl;
     }
 }
 // Kruskal's minimum spanning tree algorithm
@@ -117,13 +116,38 @@ void Graph::mstKruskal() const
     //Max no of edges is size
     DSets D(size+1);
 
-    Heap<int> H(size);
+    Heap<Edge> H(size);
+    bool done[size+1];
+
+    for(int i=0; i<size+1; i++){
+        done[i] = false;
+    }
+
+    //Heapify: Inserting all edges of the graph
+    for(int i = 1; i < size+1; i++){
+        Node *temp = array[i].getFirst();
+        done[i] = true;
+        //Loop through all edges of the node
+        while(temp != nullptr){
+            //In order to get the unique edges
+            if(!done[temp->vertex]){
+                Edge e(i, temp->vertex, temp->weight);
+                H.insert(e);
+            }
+            temp = temp->next;
+        }
+    }
 
     int counter = 0;
-
-//    while (counter < size){
-//
-//    }
+    while (counter < size-1){
+        Edge e = H.deleteMin();
+        //The nodes should be linked if they are not in the same tree
+        if (D.find(e.tail) != D.find(e.head)){
+            D.join(D.find(e.tail), D.find(e.head));
+            counter++;
+            cout << e << endl;
+        }
+    }
 }
 
 // print graph
