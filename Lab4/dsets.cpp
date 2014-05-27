@@ -68,7 +68,7 @@ void DSets::join(int r, int s)
         array[root1] += array[root2];
         array[root2] = root1;
     }
-    else{
+    else if (root1 > root2){
         array[root2] += array[root1];
         array[root1] = root2;
     }
