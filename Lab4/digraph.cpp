@@ -71,6 +71,7 @@ void Digraph::uwsssp(int s)
     for(int i=1; i<size+1; i++){
         done[i] = false;
         dist[i] = INFINITY;
+        path[i] = 0;
     }
 
     dist[s] = 0;
@@ -87,7 +88,7 @@ void Digraph::uwsssp(int s)
         while(temp != nullptr){
             //if the node is not visited
             if(dist[v]+1 < dist[temp->vertex] ){
-                cout << "temp->vertex is " << temp->vertex << " and v is " << v << endl;
+                //cout << "temp->vertex is " << temp->vertex << " and v is " << v << endl;
                 dist[temp->vertex] = dist[v]+1;
                 path[temp->vertex] = (temp->vertex == s ? 0 : v);
                 done[temp->vertex] = true;
@@ -108,11 +109,12 @@ void Digraph::pwsssp(int s)
     }
 
     // *** TODO ***
-        Queue<int> Q;
+    Queue<int> Q;
     //no node is visited yet, all distances should be set to infinity
     for(int i=1; i<size+1; i++){
         done[i] = false;
         dist[i] = INFINITY;
+        path[i] = 0;
     }
 
     dist[s] = 0;
@@ -178,12 +180,12 @@ void Digraph::printPath(int t) const
          return;
     }
 
-    
+
     // *** TODO ***
     if(dist[t] != 0){
         //store the actual value, and call recursively..
         printPath(path[t]);
     }
     cout << " " << t;
-    
+
 }
